@@ -1,3 +1,3 @@
 struct SQiftViewModel {
-    var text = "Hello, World!"
+    var name = "SQiftViewModel"
 }

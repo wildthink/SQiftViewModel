@@ -6,7 +6,7 @@ final class SQiftViewModelTests: XCTestCase {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct
         // results.
-        XCTAssertEqual(SQiftViewModel().text, "Hello, World!")
+        XCTAssertEqual(SQiftViewModel().name, "SQiftViewModel")
     }
 
     static var allTests = [
