@@ -133,38 +133,38 @@ private var _bindings_key = "bindings_key"
  as Inspectable in Interface Builder and can also be set in code. The qname is
  read-only and derived from the qKeys are runtime.
  */
-extension UIView {
+public extension UIView {
 
     /** The namespace is a relative name/key that should be unique
      within the hierarchy in which it is instantiated.
      */
     @IBInspectable
-    public var namespace: String? {
+    var namespace: String? {
         get { return ib.namespace }
         set { ib.namespace = newValue }
     }
 
     @IBInspectable
-    public var modelId: String? {
+    var modelId: String? {
         get { return ib.modelId }
         set { ib.modelId = newValue }
     }
 }
 
 
-extension UIViewController {
+public extension UIViewController {
 
     /** The namespace is a relative name/key that should be unique
      within the hierarchy in which it is instantiated.
      */
     @IBInspectable
-    public var namespace: String? {
+    var namespace: String? {
         get { return ib.namespace }
         set { ib.namespace = newValue }
     }
 
     @IBInspectable
-    public var modelId: String? {
+    var modelId: String? {
         get { return ib.modelId }
         set { ib.modelId = newValue }
     }

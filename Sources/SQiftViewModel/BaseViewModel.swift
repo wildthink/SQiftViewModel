@@ -47,7 +47,7 @@ public class BaseViewModel: NSObject {
         
         @objc public override var description: String { "DBUpdate(\(op) \(db) \(table) \(row))" }
         
-        init(op: Connection.UpdateHookType, db: String?, table: String?, row: Int64) {
+        public init(op: Connection.UpdateHookType, db: String?, table: String?, row: Int64) {
             self.op = op
             self.db = db ?? "<db>"
             self.table = table ?? "<table>"
@@ -55,7 +55,7 @@ public class BaseViewModel: NSObject {
         }
     }
     
-    static var shared: BaseViewModel?
+    public static var shared: BaseViewModel?
     
     public var db: AppDatabase
     public var delegate: BaseViewModelDelegate?
@@ -70,11 +70,11 @@ public class BaseViewModel: NSObject {
         }
     }
 
-    func didCommit() {
+    open func didCommit() {
         delegate?.modelWillCommit?(self)
     }
 
-    func didUpdate(_ log: DBUpdateInfo) {
+    open func didUpdate(_ log: DBUpdateInfo) {
         delegate?.modelDidUpdate?(self, info: log)
     }
 
@@ -88,11 +88,11 @@ public class BaseViewModel: NSObject {
     
     var handleMissingResults: ((BaseViewModel, Any.Type, _ table: String, _ predicate: String?) -> Void)?
     
-    func noResultsForFetch(of type: Any.Type, from table: String, where predicate: String?) {
+    open func noResultsForFetch(of type: Any.Type, from table: String, where predicate: String?) {
         handleMissingResults?(self, type, table, predicate)
     }
     
-    func fetch<T:ExpressibleByRow> (from table: String, filter: String? = nil, limit: Int? = nil) throws -> [T] {
+    public func fetch<T:ExpressibleByRow> (from table: String, filter: String? = nil, limit: Int? = nil) throws -> [T] {
 
         let test = filterPredicate(from: filter, asClause: true) ?? ""
         var limitClause = ""
@@ -113,7 +113,7 @@ public class BaseViewModel: NSObject {
         return results
     }
 
-    func sql_predicate(field: String?, search: String?) -> String? {
+    public func sql_predicate(field: String?, search: String?) -> String? {
         guard let field = field, let search = search else { return nil }
 
         if let filter = db.get(env: search) as? String {
@@ -130,7 +130,7 @@ public class BaseViewModel: NSObject {
         return nil
     }
 
-    func filterPredicate(from text: String?, asClause: Bool = false) -> String? {
+    public func filterPredicate(from text: String?, asClause: Bool = false) -> String? {
         guard let text = text else { return nil }
         let parts = text.components(separatedBy: CharacterSet(charactersIn: "./"))
         switch parts.count {
@@ -147,7 +147,7 @@ public class BaseViewModel: NSObject {
         }
     }
         
-    func configureDatabase() throws {
+    open func configureDatabase() throws {
 
         try db.createApplicationDatabase()
 
@@ -176,7 +176,7 @@ public class BaseViewModel: NSObject {
         }
     }
     
-    func load (_ name: String?, keypath: String? = nil, into table: String) throws {
+    public func load (_ name: String?, keypath: String? = nil, into table: String) throws {
         guard let name = name else { throw ViewModelError.MissingData }
         if name.starts(with: "http") {
             return try load (URL(string: name), keypath: keypath, into: table)
@@ -186,7 +186,7 @@ public class BaseViewModel: NSObject {
         }
     }
 
-    func load (_ url: URL?, keypath: String? = nil, into table: String) throws {
+    public func load (_ url: URL?, keypath: String? = nil, into table: String) throws {
         guard let url = url else { throw ViewModelError.MissingData }
         if url.isFileURL {
             return try load(url.path, from: keypath, into: table) }
@@ -195,7 +195,7 @@ public class BaseViewModel: NSObject {
         }
     }
 
-    func load (url: URL, from key: String? = nil, into table: String) {
+    public func load (url: URL, from key: String? = nil, into table: String) {
 
         URLSession.shared.dataTask(with: url) { (data, response, error) in
             if let error = error {
@@ -214,7 +214,7 @@ public class BaseViewModel: NSObject {
         }.resume()
     }
     
-    func load (_ file: String, in bundle: Bundle = Bundle.main, from key: String? = nil, into table: String) throws {
+    public func load (_ file: String, in bundle: Bundle = Bundle.main, from key: String? = nil, into table: String) throws {
         var path: String
         if FileManager().fileExists(atPath: file) {
             path = file
@@ -233,7 +233,7 @@ public class BaseViewModel: NSObject {
     
     /// This method is responsible for inserting the indicated Dictionary items into
     /// the database.
-    func load(json: NSObject, from key: String? = nil, into table: String) throws {
+    public func load(json: NSObject, from key: String? = nil, into table: String) throws {
 
         var plist: Any?
 
@@ -256,7 +256,7 @@ public class BaseViewModel: NSObject {
 
 // MARK: SQift Method Wrappers
 
-extension BaseViewModel {
+public extension BaseViewModel {
 
     func select(_ col: String, from table: String, id: Int) throws -> Any? {
         var result: Any?
@@ -295,7 +295,7 @@ import UIKit
     func refresh(view: UIView, from: String, id: Int)
 }
 
-extension ViewModel {
+public extension ViewModel {
     
     func set(env: String, to value: Bindable) throws {
         try BaseViewModel.shared?.db.set(env: env, to: value)
@@ -325,7 +325,7 @@ extension BaseViewModel: ViewModel {
         }
     }
     
-    func indentifiers(for table: String, filter: String?) -> [Int] {
+    public func indentifiers(for table: String, filter: String?) -> [Int] {
         var results: [Int64]?
         let test = filterPredicate(from: filter, asClause: false)
         try? db.executeRead { (c) in
@@ -344,11 +344,11 @@ extension UIViewController {
     }
 }
 
-protocol ViewModelProvider {
+public protocol ViewModelProvider {
     var baseViewModel: BaseViewModel { get }
 }
 
-extension UIResponder {
+public extension UIResponder {
     var viewModel: ViewModel? {
         return (self as? ViewModel)
             ?? (self as? ViewModelProvider)?.baseViewModel

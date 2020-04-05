@@ -11,13 +11,13 @@ import UIKit
 public class TableViewController: UITableViewController {
 
     @IBInspectable
-    var selectionKey: String?
+    public var selectionKey: String?
 
     @IBInspectable
-    var filter: String?
+    public var filter: String?
 
     @IBInspectable
-    var cellIdentifier: String = "main"
+    public var cellIdentifier: String = "main"
 
     var dbids: [Int] = []
 

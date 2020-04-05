@@ -15,19 +15,19 @@ import SQift
 public class MapViewController: UIViewController {
 
     @IBInspectable
-    var selectionKey: String?
+    public var selectionKey: String?
 
     @IBInspectable
-    var filter: String?
+    public var filter: String?
 
     @IBInspectable
-    var fetchLimit: Int = 100
+    public var fetchLimit: Int = 100
 
     @IBInspectable
-    var cellIdentifier: String = ""
+    public var cellIdentifier: String = ""
 
     @IBInspectable
-    var itemSegue: String = ""
+    public var itemSegue: String = ""
 
     var _mapView: MKMapView?
 
