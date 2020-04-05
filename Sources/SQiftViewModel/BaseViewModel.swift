@@ -60,7 +60,7 @@ public class BaseViewModel: NSObject {
     public var db: AppDatabase
     public var delegate: BaseViewModelDelegate?
     
-    init (storageLocation: StorageLocation = .inMemory) throws {
+    public init (storageLocation: StorageLocation = .inMemory) throws {
 
         db = try AppDatabase(storageLocation)
         super.init()
@@ -86,7 +86,7 @@ public class BaseViewModel: NSObject {
         db.get(env: env) as? A ?? alt
     }
     
-    var handleMissingResults: ((BaseViewModel, Any.Type, _ table: String, _ predicate: String?) -> Void)?
+    public var handleMissingResults: ((BaseViewModel, Any.Type, _ table: String, _ predicate: String?) -> Void)?
     
     open func noResultsForFetch(of type: Any.Type, from table: String, where predicate: String?) {
         handleMissingResults?(self, type, table, predicate)
