@@ -176,17 +176,17 @@ public class BaseViewModel: NSObject {
         }
     }
     
-    public func load (_ name: String?, keypath: String? = nil, into table: String) throws {
+    public func load (name: String?, keypath: String? = nil, into table: String) throws {
         guard let name = name else { throw ViewModelError.MissingData }
         if name.starts(with: "http") {
-            return try load (URL(string: name), keypath: keypath, into: table)
+            return try load (url: URL(string: name), keypath: keypath, into: table)
         }
         if name.starts(with: "file://") {
-            return try load (URL(string: name), keypath: keypath, into: table)
+            return try load (url: URL(string: name), keypath: keypath, into: table)
         }
     }
 
-    public func load (_ url: URL?, keypath: String? = nil, into table: String) throws {
+    public func load (url: URL?, keypath: String? = nil, into table: String) throws {
         guard let url = url else { throw ViewModelError.MissingData }
         if url.isFileURL {
             return try load(url.path, from: keypath, into: table) }
@@ -195,7 +195,7 @@ public class BaseViewModel: NSObject {
         }
     }
 
-    public func load (url: URL, from key: String? = nil, into table: String) {
+    func load (url: URL, from key: String? = nil, into table: String) {
 
         URLSession.shared.dataTask(with: url) { (data, response, error) in
             if let error = error {
