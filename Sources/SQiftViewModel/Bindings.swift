@@ -68,6 +68,10 @@ extension UIViewController: UISearchBarDelegate {
         let key = searchBar.modelId ?? "search"
         BaseViewModel.shared?.set(env: key, to: searchText)
     }
+
+    public func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder() // hides the keyboard.
+    }
 }
 
 public extension UIViewController {

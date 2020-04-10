@@ -37,7 +37,7 @@ enum ViewModelError: String, Error {
     @objc optional func modelDidUpdate(_ vm: BaseViewModel, info: BaseViewModel.DBUpdateInfo)
 }
 
-public class BaseViewModel: NSObject {
+open class BaseViewModel: NSObject {
     
     @objc public class DBUpdateInfo: NSObject {
         var op: Connection.UpdateHookType
