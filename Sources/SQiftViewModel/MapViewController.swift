@@ -77,6 +77,12 @@ public class MapViewController: UIViewController {
         }
         mapView.addAnnotations(items)
         mapView.showAnnotations(items, animated: true)
+        
+        if items.count <= 3 {
+            items.forEach { mapView.selectAnnotation($0, animated: true) }
+        } else {
+            mapView.selectedAnnotations.forEach { mapView.deselectAnnotation($0, animated: true) }
+        }
 //        if let center = state?.searchLocation {
 //            centerMapOnLocation(location: center, regionRadius: state?.regionRadius)
 //        }
