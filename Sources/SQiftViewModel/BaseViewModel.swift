@@ -86,6 +86,20 @@ open class BaseViewModel: NSObject {
         db.get(env: env) as? A ?? alt
     }
     
+    public func clear(env: String) throws {
+        try db.executeWrite {
+            let sql: SQL = "DELETE FROM \(db.applicationEnvTable) WHERE key = ?"
+            try $0.prepare(sql, env).run()
+        }
+    }
+
+    public func clear(log: String) throws {
+        try db.executeWrite {
+            let sql: SQL = "DELETE FROM \(db.applicationLogTable) WHERE key = ?"
+            try $0.prepare(sql, log).run()
+        }
+    }
+
     public var handleMissingResults: ((BaseViewModel, Any.Type, _ table: String, _ predicate: String?) -> Void)?
     
     open func noResultsForFetch(of type: Any.Type, from table: String, where predicate: String?) {
