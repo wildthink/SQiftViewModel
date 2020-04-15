@@ -12,7 +12,7 @@ import MapKit
 import CoreLocation
 import SQift
 
-public class MapViewController: UIViewController {
+open class MapViewController: UIViewController {
 
     @IBInspectable
     public var selectionKey: String?

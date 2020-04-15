@@ -340,7 +340,7 @@ extension BaseViewModel: ViewModel {
 }
 
 extension UIViewController {
-    @objc public func refresh(from model: ViewModel) {
+    @objc open func refresh(from model: ViewModel) {
     }
 }
 

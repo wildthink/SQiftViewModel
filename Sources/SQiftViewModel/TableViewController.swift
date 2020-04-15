@@ -8,7 +8,7 @@
 //
 import UIKit
 
-public class TableViewController: UITableViewController {
+open class TableViewController: UITableViewController {
 
     @IBInspectable
     public var selectionKey: String?
