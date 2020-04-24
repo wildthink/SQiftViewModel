@@ -38,6 +38,11 @@ open class MapViewController: UIViewController {
 
     var items: [MKAnnotation] = []
 
+    open override func loadView() {
+        guard viewIfLoaded == nil else { return }
+        view = MKMapView()
+    }
+    
     override public func viewDidLoad() {
         super.viewDidLoad()
         guard let mapView = mapView else { return }
@@ -166,12 +171,12 @@ extension MapViewController: MKMapViewDelegate {
     var subtitle: String?
     var coordinate: CLLocationCoordinate2D
 
-    init(id: Int, title: String?, subtitle: String?, lat: Double, lon: Double) {
-        self.id = id
-        self.title = title
-        self.subtitle = subtitle
-        self.coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
-    }
+//    init(id: Int, title: String?, subtitle: String?, lat: Double, lon: Double) {
+//        self.id = id
+//        self.title = title
+//        self.subtitle = subtitle
+//        self.coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
+//    }
 
     required init(row: Row) {
         self.id = row.value(forColumnName: "id") ?? 0
@@ -183,6 +188,7 @@ extension MapViewController: MKMapViewDelegate {
     }
 }
 
+/*
 public extension MKMapItem {
   convenience init(coordinate: CLLocationCoordinate2D, name: String) {
     self.init(placemark: .init(coordinate: coordinate))
@@ -190,7 +196,6 @@ public extension MKMapItem {
   }
 }
 
-/*
 let source = MKMapItem(coordinate: .init(latitude: lat, longitude: lng), name: "Source")
 let destination = MKMapItem(coordinate: .init(latitude: lat, longitude: lng), name: "Destination")
 

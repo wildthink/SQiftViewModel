@@ -9,16 +9,16 @@ import Foundation
 import SQift
 
 // MARK: trace()
-extension NSObject {
-    func trace(line: Int = #line, file: String = #file, function: String = #function, _ msg: String = "") {
-        let name = type(of: self)
-        Swift.print("TRACE", line, name, function, msg)
-    }
-}
-
-func trace(line: Int = #line, file: String = #file, function: String = #function, _ msg: String = "") {
-    Swift.print("TRACE", line, function, msg)
-}
+//extension NSObject {
+//    func trace(line: Int = #line, file: String = #file, function: String = #function, _ msg: String = "") {
+//        let name = type(of: self)
+//        Swift.print("TRACE", line, name, function, msg)
+//    }
+//}
+//
+//func trace(line: Int = #line, file: String = #file, function: String = #function, _ msg: String = "") {
+//    Swift.print("TRACE", line, function, msg)
+//}
 
 
 public protocol FormValuesProvider {
@@ -60,6 +60,12 @@ open class BaseViewModel: NSObject {
     public var db: AppDatabase
     public var delegate: BaseViewModelDelegate?
     
+    var timer: Timer?
+    public var signalKeys: [String] = ["signal"]
+    public var watchingForSignals: Bool = false {
+        didSet { listenForSignals(watchingForSignals) }
+    }
+    
     public init (storageLocation: StorageLocation = .inMemory) throws {
 
         db = try AppDatabase(storageLocation)
@@ -67,6 +73,32 @@ open class BaseViewModel: NSObject {
         try configureDatabase()
         if BaseViewModel.shared == nil {
             BaseViewModel.shared = self
+        }
+    }
+
+    open func listenForSignals(_ do_listen: Bool) {
+        if do_listen {
+            timer = Timer.scheduledTimer(timeInterval: 0.5, target: self,
+                                         selector: #selector(signaled(timer:)),
+                                         userInfo: nil, repeats: true)
+        } else {
+            timer?.invalidate()
+            timer = nil
+        }
+    }
+
+    @objc open func signaled(timer: Timer) {
+        var receivedSignal = false
+        for key in signalKeys {
+            let signal: String? = get(env: key)
+            if let signal = signal {
+                print (key, signal, "at", timer.fireDate)
+                try? clear(env: key)
+                receivedSignal = true
+            }
+        }
+        if receivedSignal {
+            didCommit()
         }
     }
 
