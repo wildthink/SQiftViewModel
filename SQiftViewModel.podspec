@@ -11,6 +11,5 @@ Pod::Spec.new do |s|
   s.swift_version = "5.0"
 
   s.ios.deployment_target = "10.0"
- 
-  s.dependency 'SQift', git: "https://github.com/wildthink/SQift.git"
+  s.dependency 'SQift'
 end
